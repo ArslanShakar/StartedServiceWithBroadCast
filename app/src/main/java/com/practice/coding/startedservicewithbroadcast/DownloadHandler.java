@@ -16,14 +16,14 @@ public class DownloadHandler extends Handler {
     @Override
     public void handleMessage(Message msg) {
 
-        String songName = msg.obj.toString();
+        Log.d(Constants.TAG, "Song downloaded on Thread Name : "+Thread.currentThread().getName());
 
-        downloadSong(songName);
+        String songName = msg.obj.toString();
+        boolean result = startedServiceRef.stopSelfResult(msg.arg1);
+        //startedServiceRef.stopSelf(msg.arg1);
 
         //startedServiceRef.stopSelf(); //after complete task or if app is close or crash it shut dowm the service completely
-
-      //  startedServiceRef.stopSelf(msg.arg1);
-        boolean result = startedServiceRef.stopSelfResult(msg.arg1);
+        downloadSong(songName);
 
         //send data to UI using Local Broadcast
         sendDataToUI(songName, result);
@@ -43,7 +43,7 @@ public class DownloadHandler extends Handler {
     private void downloadSong(String songName) {
         try {
             Log.d(Constants.TAG, songName+" : Download Starting . . . ");
-            Thread.sleep(4000);
+            Thread.sleep(3000);
             Log.d(Constants.TAG, songName+" : Download Completed!");
         } catch (InterruptedException e) {
 

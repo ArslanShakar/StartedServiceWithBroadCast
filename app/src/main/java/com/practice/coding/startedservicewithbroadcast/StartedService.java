@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 public class StartedService extends Service {
-
     private DownloadThread downloadThread;
 
     @Override
@@ -25,17 +24,20 @@ public class StartedService extends Service {
         }
 
         downloadThread.mHandler.setStartedServiceRef(this);
-        downloadThread.mHandler.setContext(getApplicationContext()); //in service class we get context..but in handler class not
+        downloadThread.mHandler.setContext(this); //in service class we get context..but in handler class not
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d(Constants.TAG, "onStartCommand called with startId: "+startId);
+        Log.d(Constants.TAG, "onStartCommand run on Thread Name : "+Thread.currentThread().getName());
 
         String songName = intent.getStringExtra(Constants.MESSAGE_KEY);
         Message message = Message.obtain();
         message.obj = songName;
         message.arg1 = startId;
-        downloadThread.mHandler.handleMessage(message);
+
+        downloadThread.mHandler.sendMessage(message);
 
         return START_REDELIVER_INTENT;
     }

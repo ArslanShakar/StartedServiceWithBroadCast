@@ -18,11 +18,10 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar progressBar;
 
     //after registering broadcast receiver get data from the receiver..It run on the Main Thread
-    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            Log.d(Constants.TAG, " Thread Name : "+Thread.currentThread().getName());
             String getSongName = intent.getStringExtra(Constants.MESSAGE_KEY);
             boolean isAllDonwloadsCompleted = intent.getBooleanExtra(Constants.PROGRESS_KEY, false);
 
@@ -31,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
             if (isAllDonwloadsCompleted) {
                 displayProgresBar(false);
             }
+
+            Log.d(Constants.TAG, "Broadcast onReceive called.. Thread Name : "+Thread.currentThread().getName());
         }
     };
 
@@ -59,8 +60,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void runService(View view) {
-        displayProgresBar(true);
         tv.setText("Code Running...");
+        displayProgresBar(true);
         for (String song : Playlist.songs) {
             /*
             For every song intent executed and send msg to to StartedService class..like 3 songs 3 times intent executed and send message..
